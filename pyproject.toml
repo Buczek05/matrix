@@ -1,12 +1,16 @@
 [tool.poetry]
-name = "matrix"
-version = "0.1.0"
-description = ""
-authors = ["Kacper Bukowski <kacperbuko2005@gmail.com>"]
+name = "matrix_class"
+version = "0.1.2"
+description = "Matrix on class"
+authors = ["Kacper Bukowski <kacperbuko@wp.pl>"]
 readme = "README.md"
+license = "MIT"
+classifiers = ["Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent", ]
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.7"
 setuptools = "^69.0.2"
 
 

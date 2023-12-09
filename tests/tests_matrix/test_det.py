@@ -1,7 +1,7 @@
 import pytest
 
 from src.exceptions import MatrixIsNotSquare
-from src.matrix import Matrix
+from src.matrix_class import Matrix
 
 
 def test_det_not_square():

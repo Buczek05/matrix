@@ -1,7 +1,7 @@
 import pytest
 
 from src.exceptions import RowOutOfBoundsException, ColumnOutOfBoundsException, MatrixSizesAreDifferent
-from src.matrix import Matrix
+from src.matrix_class import Matrix
 
 
 @pytest.fixture
