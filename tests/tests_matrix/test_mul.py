@@ -1,7 +1,7 @@
 import pytest
 
 from src.exceptions import MatrixSizesAreWrongForMul
-from src.matrix import Matrix
+from src.matrix_class import Matrix
 
 
 def test_mul_by_number() -> None:
