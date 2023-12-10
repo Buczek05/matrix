@@ -19,6 +19,21 @@ def test_get_transported() -> None:
     assert matrix_transported.columns == 3
 
 
+def test_to_transported() -> None:
+    matrix = Matrix(3, 4)
+    matrix[0, 0] = 1.0
+    matrix[1, 1] = 2.0
+    matrix[2, 2] = 3.0
+    matrix[0, 1] = 4.0
+    matrix.to_transported()
+    assert matrix[0, 0] == 1.0
+    assert matrix[1, 1] == 2.0
+    assert matrix[2, 2] == 3.0
+    assert matrix[1, 0] == 4.0
+    assert matrix.rows == 4
+    assert matrix.columns == 3
+
+
 def test_get_complement() -> None:
     matrix = Matrix(3, 3)
     matrix[0, 0] = 1.0
@@ -53,6 +68,30 @@ def test_get_inverse_det_0() -> None:
     with pytest.raises(MatrixHaveNotInverseVersion):
         assert matrix.get_inverse()
 
+
+def test_to_complement() -> None:
+    matrix = Matrix(3, 3)
+    matrix[0, 0] = 1.0
+    matrix[0, 1] = 2.0
+    matrix[0, 2] = 3.0
+    matrix[1, 0] = 2.0
+    matrix[1, 1] = 4.0
+    matrix[1, 2] = 5.0
+    matrix[2, 0] = 3.0
+    matrix[2, 1] = 5.0
+    matrix[2, 2] = 6.0
+    matrix.to_complement()
+    assert matrix[0, 0] == -1.0
+    assert matrix[0, 1] == 3.0
+    assert matrix[0, 2] == -2.0
+    assert matrix[1, 0] == 3.0
+    assert matrix[1, 1] == -3.0
+    assert matrix[1, 2] == 1.0
+    assert matrix[2, 0] == -2.0
+    assert matrix[2, 1] == 1.0
+    assert matrix[2, 2] == -0.0
+
+
 def test_get_inverse() -> None:
     matrix = Matrix(3, 3)
     matrix[0, 0] = 1.0
@@ -74,3 +113,26 @@ def test_get_inverse() -> None:
     assert inverse_matrix[2, 0] == 2.0
     assert inverse_matrix[2, 1] == -1.0
     assert inverse_matrix[2, 2] == 0.0
+
+
+def test_to_inverse() -> None:
+    matrix = Matrix(3, 3)
+    matrix[0, 0] = 1.0
+    matrix[0, 1] = 2.0
+    matrix[0, 2] = 3.0
+    matrix[1, 0] = 2.0
+    matrix[1, 1] = 4.0
+    matrix[1, 2] = 5.0
+    matrix[2, 0] = 3.0
+    matrix[2, 1] = 5.0
+    matrix[2, 2] = 6.0
+    matrix.to_inverse()
+    assert matrix[0, 0] == 1.0
+    assert matrix[0, 1] == -3.0
+    assert matrix[0, 2] == 2.0
+    assert matrix[1, 0] == -3.0
+    assert matrix[1, 1] == 3.0
+    assert matrix[1, 2] == -1.0
+    assert matrix[2, 0] == 2.0
+    assert matrix[2, 1] == -1.0
+    assert matrix[2, 2] == 0.0

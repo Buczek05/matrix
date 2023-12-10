@@ -165,6 +165,12 @@ class Matrix:
                 result[column, row] = self._matrix[row][column]
         return result
 
+    def to_transported(self) -> None:
+        matrix = self.get_transported()
+        self._matrix = matrix._matrix
+        self._rows = matrix.rows
+        self._columns = matrix.columns
+
     def get_complement(self) -> "Matrix":
         if self._columns != self._rows:
             raise MatrixIsNotSquare(self._rows, self._columns)
@@ -173,6 +179,9 @@ class Matrix:
             for column in range(self._columns):
                 result[row, column] = self._get_complement_item(row, column)
         return result
+
+    def to_complement(self) -> None:
+        self._matrix = self.get_complement()._matrix
 
     def _get_complement_item(self, row: int, column: int) -> float:
         sign = -1 if (row + column) % 2 == 1 else 1
@@ -183,3 +192,6 @@ class Matrix:
         if det == 0.0:
             raise MatrixHaveNotInverseVersion()
         return self.get_complement().get_transported() * (1 / det)
+
+    def to_inverse(self) -> None:
+        self._matrix = self.get_inverse()._matrix
