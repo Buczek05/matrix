@@ -1,4 +1,4 @@
-from typing import TypeVar, List, Tuple
+from typing import TypeVar, List, Tuple, overload
 
 from .exceptions import ColumnOutOfBoundsException, RowOutOfBoundsException, MatrixIsNotSquare, MatrixSizesAreDifferent, \
     MatrixSizesAreWrongForMul
@@ -116,13 +116,22 @@ class Matrix:
                 result[row, column] = self._matrix[row][column] - other._matrix[row][column]
         return result
 
-    def __mul__(self, other: _MulT) -> "Matrix":
-        if isinstance(other, Matrix):
-            return self.times_by_matrix(other)
-        else:
-            return self.times_by_number(other)
+    @overload
+    def __mul__(self, other: float | int) -> "Matrix":
+        pass
 
-    def times_by_matrix(self, other: "Matrix") -> "Matrix":
+    @overload
+    def __mul__(self, other: "Matrix") -> "Matrix":
+        pass
+
+    def __mul__(self, other):
+        if isinstance(other, Matrix):
+            return self.get_times_by_matrix(other)
+        if isinstance(other, (float, int)):
+            return self.get_times_by_number(other)
+        raise NotImplementedError()
+
+    def get_times_by_matrix(self, other: "Matrix") -> "Matrix":
         if self._columns != other._rows:
             raise MatrixSizesAreWrongForMul(self._columns, other._rows)
         result = Matrix(self._rows, other._columns)
@@ -137,7 +146,7 @@ class Matrix:
             item += self._matrix[row][i] * other._matrix[i][column]
         return item
 
-    def times_by_number(self, number: _NumberT) -> "Matrix":
+    def get_times_by_number(self, number: _NumberT) -> "Matrix":
         result = Matrix(self._rows, self._columns)
         for row in range(self._rows):
             for column in range(self._columns):
