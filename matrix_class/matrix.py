@@ -1,7 +1,7 @@
 from typing import TypeVar, List, Tuple, overload
 
 from .exceptions import ColumnOutOfBoundsException, RowOutOfBoundsException, MatrixIsNotSquare, MatrixSizesAreDifferent, \
-    MatrixSizesAreWrongForMul
+    MatrixSizesAreWrongForMul, MatrixHaveNotInverseVersion
 
 SPACE_BETWEEN_COLUMNS = 2
 _MulT = TypeVar("_MulT", float, int, "Matrix")
@@ -82,20 +82,22 @@ class Matrix:
         det = 0.0
         for column in range(self._columns):
             sign = -1 if column % 2 == 1 else 1
-            det += sign * self._matrix[0][column] * self._get_det_of_minor(column)
+            det += sign * self._matrix[0][column] * self._get_det_of_minor(0, column)
         return det
 
-    def _get_det_of_minor(self, column: int) -> float:
+    def _get_det_of_minor(self, row: int, column: int) -> float:
         minor = Matrix(self.rows - 1, self.columns - 1)
-        for row in range(self._rows):
+        for current_row in range(self._rows):
             for current_column in range(self._columns):
-                if row == 0 or current_column == column:
+                if current_row == row or current_column == column:
                     continue
-                minor_row = row - 1
+                minor_row = current_row
+                if current_row > row:
+                    minor_row -= 1
                 minor_column = current_column
                 if current_column > column:
                     minor_column -= 1
-                minor[minor_row, minor_column] = self._matrix[row][current_column]
+                minor[minor_row, minor_column] = self._matrix[current_row][current_column]
         return minor.det
 
     def __add__(self, other: "Matrix") -> "Matrix":
@@ -152,3 +154,33 @@ class Matrix:
             for column in range(self._columns):
                 result[row, column] = self._matrix[row][column] * number
         return result
+
+    def get_transported(self) -> "Matrix":
+        """
+        changing rows to columns and columns to rows
+        :return: Transposed matrix
+        """
+        result = Matrix(self._columns, self._rows)
+        for row in range(self._rows):
+            for column in range(self._columns):
+                result[column, row] = self._matrix[row][column]
+        return result
+
+    def get_complement(self) -> "Matrix":
+        if self._columns != self._rows:
+            raise MatrixIsNotSquare(self._rows, self._columns)
+        result = Matrix(self._rows, self._columns)
+        for row in range(self._rows):
+            for column in range(self._columns):
+                result[row, column] = self._get_complement_item(row, column)
+        return result
+
+    def _get_complement_item(self, row: int, column: int) -> float:
+        sign = -1 if (row + column) % 2 == 1 else 1
+        return sign * self._get_det_of_minor(row, column)
+
+    def get_inverse(self) -> "Matrix":
+        det = self.det
+        if det == 0.0:
+            raise MatrixHaveNotInverseVersion()
+        return self.get_complement().get_transported() * (1 / det)

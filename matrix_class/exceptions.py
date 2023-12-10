@@ -23,3 +23,10 @@ class MatrixSizesAreWrongForMul(Exception):
     def __init__(self, columns1: int, rows2: int):
         super().__init__(f"Two matrix must have the same number of first columns and second rows."
                          f"Matrix 1 has {columns1} columns and Matrix 2 has {rows2} rows.")
+
+
+class MatrixHaveNotInverseVersion(Exception):
+    def __init__(self):
+        super().__init__("Matrix have not inverse version. Det = 0.")
+
+
