@@ -4,7 +4,6 @@ from .exceptions import ColumnOutOfBoundsException, RowOutOfBoundsException, Mat
     MatrixSizesAreWrongForMul, MatrixHaveNotInverseVersion
 
 SPACE_BETWEEN_COLUMNS = 2
-_MulT = TypeVar("_MulT", float, int, "Matrix")
 _NumberT = TypeVar("_NumberT", float, int)
 
 
@@ -21,15 +20,15 @@ class Matrix:
     def __getitem__(self, item: Tuple[int, int]) -> float:
         return self.get_item(item[0], item[1])
 
-    def __setitem__(self, key: Tuple[int, int], value: float):
+    def __setitem__(self, key: Tuple[int, int], value: _NumberT):
         self.set_item(key[0], key[1], value)
 
-    def set_item(self, row: int, column: int, value: float):
+    def set_item(self, row: int, column: int, value: _NumberT):
         if row < 0 or row >= self._rows:
             raise RowOutOfBoundsException(row, self._rows)
         if column < 0 or column >= self._columns:
             raise ColumnOutOfBoundsException(column, self._columns)
-        self._matrix[row][column] = value
+        self._matrix[row][column] = float(value)
 
     def get_item(self, row: int, column: int) -> float:
         if row < 0 or row >= self._rows:
@@ -119,7 +118,7 @@ class Matrix:
         return result
 
     @overload
-    def __mul__(self, other: float | int) -> "Matrix":
+    def __mul__(self, other: _NumberT) -> "Matrix":
         pass
 
     @overload
@@ -129,7 +128,7 @@ class Matrix:
     def __mul__(self, other):
         if isinstance(other, Matrix):
             return self.get_times_by_matrix(other)
-        if isinstance(other, (float, int)):
+        if isinstance(other, (int, float)):
             return self.get_times_by_number(other)
         raise NotImplementedError()
 
