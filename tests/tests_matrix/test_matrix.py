@@ -98,3 +98,28 @@ def test_sub_matrix_different_sizes() -> None:
     matrix_2 = Matrix(3, 3)
     with pytest.raises(MatrixSizesAreDifferent):
         assert matrix_1 - matrix_2
+
+
+def test_equal() -> None:
+    matrix_1 = Matrix(2, 2)
+    matrix_2 = Matrix(2, 2)
+    matrix_1[0, 0] = 1.0
+    matrix_1[0, 1] = 2.0
+    matrix_1[1, 0] = 3.0
+    matrix_1[1, 1] = 4.0
+    matrix_2[0, 0] = 1.0
+    matrix_2[0, 1] = 2.0
+    matrix_2[1, 0] = 3.0
+    matrix_2[1, 1] = 4.0
+    assert matrix_1 == matrix_2
+
+    matrix_1 = Matrix(2, 2)
+    matrix_2 = Matrix(2, 3)
+    assert matrix_1 != matrix_2
+
+    matrix_1 = Matrix(2, 2)
+    matrix_2 = Matrix(2, 2)
+    matrix_1[0, 0] = 1.0
+    matrix_1[0, 1] = 2.0
+    matrix_1[1, 0] = 3.0
+    assert matrix_1 != matrix_2

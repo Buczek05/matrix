@@ -195,3 +195,30 @@ class Matrix:
 
     def to_inverse(self) -> None:
         self._matrix = self.get_inverse()._matrix
+
+    def __eq__(self, other: "Matrix") -> bool:
+        return self._matrix == other._matrix
+
+    def read_from_console(self) -> None:
+        for row in range(self._rows):
+            for column in range(self._columns):
+                self._print_for_reading(row, column)
+                self._matrix[row][column] = float(input(f"x = ").replace(",", "."))
+                self._clear_printed_matrix()
+
+    def _print_for_reading(self, x_row: int, x_column: int) -> None:
+        text = ""
+        max_number_length = self._get_max_number_length() + SPACE_BETWEEN_COLUMNS
+        for row in range(self._rows):
+            for column in range(self._columns):
+                if row == x_row and column == x_column:
+                    text += "x".rjust(max_number_length)
+                else:
+                    number = self._get_number_as_str(row, column)
+                    text += number.rjust(max_number_length)
+            text += "\n"
+        print(text)
+
+    def _clear_printed_matrix(self) -> None:
+        print("\033[A" * (self._rows+2), end="")
+        print("\033[K" * (self._rows+2), end="")
